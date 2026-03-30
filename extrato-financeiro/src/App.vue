@@ -1,10 +1,18 @@
 <script setup lang="ts">
 
 import {ref} from 'vue'
+
+
+interface Transaction{
+  id: number,
+  amount: number,
+  description: string
+}
+
 const newAmount = ref('')
 const newDescription = ref('')
 
-const transactions = ref([])
+const transactions = ref<Transaction[]>([])
 
 function addTransaction(){
   const amount = Number(newAmount.value)
@@ -39,6 +47,8 @@ function addTransaction(){
       <li v-for="transaction in transactions" :key="transaction.id">
         <span>{{transaction.amount}}</span>
         <span>{{transaction.description}}</span>
+        <span><i class="fa-solid fa-angle-up"></i></span>
+        <span><i class="fa-solid fa-angle-down"></i></span>        
       </li>
     </ul>
 
