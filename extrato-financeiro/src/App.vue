@@ -27,6 +27,9 @@ function addTransaction(){
   newDescription.value = '';
 }
 
+const deleteTransaction = (index: number) => {
+  transactions.value.splice(index, 1);
+}
 
 </script>
 
@@ -44,11 +47,12 @@ function addTransaction(){
   </form>
   <div id="list">
     <ul>
-      <li v-for="transaction in transactions" :key="transaction.id">
+      <li v-for="(transaction,index) in transactions" :key="transaction.id">
         <span>{{transaction.amount}}</span>
         <span>{{transaction.description}}</span>
         <span><i class="fa-solid fa-angle-up"></i></span>
         <span><i class="fa-solid fa-angle-down"></i></span>        
+        <span class="delete" @click="deleteTransaction(index)"><i class="fa-regular fa-trash-can"></i></span>
       </li>
     </ul>
 
