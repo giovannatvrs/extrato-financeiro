@@ -10,8 +10,6 @@ interface Transaction{
   description: string
 }
 
-const newAmount = ref(0)
-const newDescription = ref('')
 
 const transactions = ref<Transaction[]>([
   {
@@ -28,7 +26,7 @@ const transactions = ref<Transaction[]>([
   }
 ])
 
-const addTransaction = (newTransaction: { id: number; amount: number; description: string }) => {
+function addTransaction(newTransaction: Transaction){
   transactions.value.push(newTransaction)
 };
 
