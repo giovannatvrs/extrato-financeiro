@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
 import {ref} from 'vue'
-
+import Transaction from './components/Transaction.vue'
+import TransactionForm from './components/TransactionForm.vue'
 
 interface Transaction{
   id: number,
@@ -9,52 +10,48 @@ interface Transaction{
   description: string
 }
 
-const newAmount = ref('')
+const newAmount = ref(0)
 const newDescription = ref('')
 
-const transactions = ref<Transaction[]>([])
+const transactions = ref<Transaction[]>([
+  {
+    id: 1, amount: 36.99,
+    description: 'Pix recebido'
+  },
+  {
+    id: 2, amount: 2568.50,
+    description: 'Salário'
+  },
+  {
+    id: 3, amount: 158.75,
+    description: 'Compras na farmácia'
+  }
+])
 
-function addTransaction(){
-  const amount = Number(newAmount.value)
-  const description = newDescription.value.trim()
+const addTransaction = (newTransaction: { id: number; amount: number; description: string }) => {
+  transactions.value.push(newTransaction)
+};
 
-  transactions.value.push({
-    id: Date.now(),
-    amount: amount,
-    description: description
-  })
-  newAmount.value = '';
-  newDescription.value = '';
-}
-
-function deleteTransaction(id: number){
+function deleteItem(id: number){
   transactions.value = transactions.value.filter((t) => t.id !== id)
 }
 
 </script>
 
 <template>
+ 
   <div>
       <h1>Transações</h1>
       <button>Nova transação</button>
   </div>
-  <form @submit.prevent="addTransaction">
-      <label for="amount">Valor:</label>
-      <input type="number" id="amount" step="0.01" placeholder="R$ 0,00" v-model="newAmount">
-      <label for="description">Descrição:</label>
-      <input type="text" id="description" placeholder="Informe a descrição da transação aqui" v-model="newDescription"> 
-      <button type="submit">Adicionar</button>
-  </form>
-  <div id="list">
-    <ul>
-      <li v-for="transaction in transactions" :key="transaction.id">
-        <span>{{transaction.amount}}</span>
-        <span>{{transaction.description}}</span>
-        <span><i class="fa-solid fa-angle-up"></i></span>
-        <span><i class="fa-solid fa-angle-down"></i></span>        
-        <span class="delete" @click="deleteTransaction(transaction.id)"><i class="fa-regular fa-trash-can"></i></span>
-      </li>
-    </ul>
-
-  </div>
+  <TransactionForm @submit-form="addTransaction"></TransactionForm>
+  <ul>
+      <Transaction v-for="(item, index) in transactions"
+        :id="item.id"
+        :amount="item.amount"
+        :description="item.description"
+        v-on:deleteTransaction="deleteItem">
+      </Transaction>
+  </ul>
+   
 </template>
